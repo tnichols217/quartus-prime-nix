@@ -22,8 +22,10 @@
 
       in with pkgs; {
         packages = rec {
-          quartus-prime = pkgs.callPackage ./quartus.pkg.nix { inherit tarBall version; };
-          default = quartus-prime;
+          unwrapped = pkgs.callPackage ./quartus/quartus-unwrapped.nix { inherit tarBall version; };
+          quartus-prime = pkgs.callPackage ./quartus.pkg.nix { inherit unwrapped; };
+          old-quartus-wrapped = pkgs.callPackage ./old/quartus-wrapped.pkg.nix { };
+          default = old-quartus-wrapped;
         };
       });
 }

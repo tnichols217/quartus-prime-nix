@@ -1,6 +1,6 @@
 { stdenv, lib, unstick, fetchurl
 , supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
-, tarBall, version, gnutar
+, tarBall, version, gnutar, autoPatchelfHook
 }:
 
 let
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
 
   src = tarBall;
 
-  nativeBuildInputs = [ unstick gnutar ];
+  nativeBuildInputs = [ unstick gnutar autoPatchelfHook ];
 
   buildCommand = let
     components = lib.sublist 2 ((lib.length src) - 2) src;
@@ -54,6 +54,7 @@ in stdenv.mkDerivation rec {
       # "questa_fe"
     ] ++ (lib.attrValues unsupportedDeviceIds);
   in ''
+
       mkdir -p $TEMP
       cd $TEMP
       tar xvf ${src}
@@ -61,9 +62,11 @@ in stdenv.mkDerivation rec {
 
       cd components
 
+      runHook preInstall
       unstick $TEMP/components/${builtins.head installers} \
         --disable-components ${lib.concatStringsSep "," disabledComponents} \
         --mode unattended --installdir $out --accept_eula 1
+      runHook postInstall
 
       rm -r $out/uninstall $out/logs
     '';
