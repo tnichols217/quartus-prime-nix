@@ -1,6 +1,6 @@
 { stdenv, lib, unstick, fetchurl
 , supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
-, tarBall, version
+, tarBall, version, gnutar
 }:
 
 let
@@ -48,10 +48,10 @@ in stdenv.mkDerivation rec {
       '';
     # leaves enabled: quartus, questa_fse, devinfo
     disabledComponents = [
-      "quartus_help"
+      # "quartus_help"
       "quartus_update"
       # not questa_fse
-      "questa_fe"
+      # "questa_fe"
     ] ++ (lib.attrValues unsupportedDeviceIds);
   in ''
       mkdir -p $TEMP

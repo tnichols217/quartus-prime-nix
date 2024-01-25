@@ -8,12 +8,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     source = {
-      url = "https://downloads.intel.com/akdlm/software/acdsinst/20.1std.1/720/ib_tar/Quartus-lite-20.1.1.720-linux.tar";
+      url = "file+https://downloads.intel.com/akdlm/software/acdsinst/20.1std.1/720/ib_tar/Quartus-lite-20.1.1.720-linux.tar";
       flake = false;
-    }
+    };
   };
 
-  outputs = { self, nixpkgs, flake-utils, gitignore }:
+  outputs = { self, nixpkgs, flake-utils, gitignore, source }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
@@ -25,5 +25,5 @@
           quartus-prime = pkgs.callPackage ./quartus.pkg.nix { inherit tarBall version; };
           default = quartus-prime;
         };
-      })
+      });
 }

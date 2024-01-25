@@ -1,7 +1,7 @@
 { stdenv, lib, buildFHSUserEnv, callPackage, makeDesktopItem, writeScript
 , supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
 , tarBall, version
-, unwrapped ? callPackage ./quartus.nix { inherit supportedDevices tarBall version; }
+, unwrapped ? callPackage ./quartus/quartus-unwrapped.nix { inherit supportedDevices tarBall version; }
 }:
 
 let
